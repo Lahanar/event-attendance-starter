@@ -1,0 +1,35 @@
+OpenAPI template (คัดลอกไปเป็น openapi.yaml ได้ทันที)
+openapi: 3.0.3
+info:
+  title: Event Attendance API (Lab)
+  version: 1.0.0
+paths:
+  /events/{eventId}/attendees:
+    post:
+      summary: Create attendee under an event
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email]
+              properties:
+                name: { type: string, minLength: 1 }
+                email: { type: string, format: email }
+                ticketType: { type: string, enum: [standard, vip, student], default: standard }
+      responses:
+        '201': { description: Created }
+        '400': { description: Validation error }
+        '409': { description: Duplicate (eventId,email) }
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
